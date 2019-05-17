@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import { withStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 
 const styles = {
   root: {
-    flexGrow: 1,
-  },
-  grow: {
     flexGrow: 1,
   },
   menuButton: {
@@ -19,8 +16,6 @@ const styles = {
     marginRight: 20,
   },
 };
-
-
 class NavBar extends Component {
   render() {
     return (
@@ -30,7 +25,7 @@ class NavBar extends Component {
           <IconButton className={this.props.classes.menuButton} color="inherit" aria-label="Menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" color="inherit" className={this.props.classes.grow}>
+          <Typography variant="h6" color="inherit" className={this.props.classes.root}>
             To Do
           </Typography>
           <Button color="inherit">Logout</Button>

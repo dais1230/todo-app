@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Link } from 'react-router-dom';
 import NavBar from './components/NavBar';
+import CheckboxListSecondary from './components/ListItem'
 
 const App = () => (
   <BrowserRouter>
@@ -11,6 +12,7 @@ const App = () => (
         <li><Link to='/task'>Task</Link></li>
         <li><Link to='/list'>List</Link></li>
       </ul>
+      <CheckboxListSecondary />
     <hr />
       <Route exact path='/' component={Home} />
       <Route path='/task' component={Task} />
