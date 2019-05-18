@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
@@ -25,31 +25,43 @@ type Task struct {
 	Description string `gorm:"type:text"`
 }
 
-func main() {
-	initMigrate()
-	run()
-}
+func gormConnect() *gorm.DB {
+	DBMS := "mysql"
+	USER := "root"
+	PROTOCOL := "tcp(127.0.0.1:3306)"
+	DBNAME := "todoapp"
 
-func initMigrate() {
-	db, err := gorm.Open("mysql", "root@/todoapp?charset=utf8&parseTime=True&loc=Local")
-	defer db.Close()
-	if err != nil {
-		panic(err)
-	}
+	CONNECT := USER + "@" + PROTOCOL + "/" + DBNAME + "?charset=utf8&parseTime=True&loc=Local"
+	db, err := gorm.Open(DBMS, CONNECT)
+
 	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&User{}, &Task{})
+
+	if err != nil {
+		panic(err.Error())
+	}
+	return db
 }
 
-func run() {
+func main() {
+	// instantiate echo
 	e := echo.New()
+	db := gormConnect()
+
+	e.Use(middleware.CORS())
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	// e.GET("/users", showUsers)
-	// e.GET("/user/:id", showUser)
-	// e.POST("/user", newUser)
-	// e.PUT("/user/:id", updateUser)
-	// e.DELETE("/user/:id", deleteUser)
+	var allUsers []User
+	db.Find(&allUsers)
+	fmt.Println(allUsers)
 
-	fmt.Println("Run server with echo localhost:1313")
-	log.Fatal(e.Start(":1313"))
+	defer db.Close()
+
+	// routing
+	e.GET("/users", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, allUsers)
+	})
+
+	// launch server
+	e.Start(":1313")
 }
