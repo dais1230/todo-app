@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"github.com/todo-app/server/src/handler"
 )
 
 // Association
@@ -55,13 +55,14 @@ func main() {
 	db.Find(&allUsers)
 	fmt.Println(allUsers)
 
+	var allTasks []Task
+	db.Find(&allTasks)
+	fmt.Println(allTasks)
+
 	defer db.Close()
 
 	// routing
-	e.GET("/users", func(c echo.Context) error {
-		return c.JSON(http.StatusOK, allUsers)
-	})
+	e.GET("/users", handler.Users())
 
-	// launch server
 	e.Start(":1313")
 }
