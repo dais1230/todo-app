@@ -1,5 +1,5 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -19,56 +19,89 @@ const styles = theme => ({
   },
 });
 
+
+
 class Signup extends React.Component {
-  handleChange = name => event => {
-    this.setState({ [name]: event.target.value });
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange (event) {
+    var data = this.state;
+
+    switch (event.target.name) {
+        case 'name':
+            data.name = event.target.value;
+            break;
+        case 'password':
+            data.password = event.target.value;
+            break;
+    }
+  }
+
+  handleSubmit() {
+    console.log(this.state)
+    fetch('http://localhost:1313/signup', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode: 'cors',
+      method: 'POST',
+      body:  JSON.stringify(this.state)
+    })
+    .then(x => x.json())
+    .then(res => {
+      console.log(res);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
 
   render() {
     const { classes } = this.props;
 
     return (
-      <form className={classes.container} noValidate autoComplete="off">
+      <form className={classes.container} onSubmit={this.handleSubmit} autoComplete="off">
         <TextField
-          required
+          className={classes.textField}
           id="standard-name"
           label="Name"
-          className={classes.textField}
-          onChange={this.handleChange('name')}
           margin="normal"
+          name="name"
+          onChange={this.handleChange}
+          value={this.state.name}
+          required
         />
 
         <TextField
-          required
-          id="standard-password-input"
-          label="Email"
           className={classes.textField}
-          type="email"
-          autoComplete="current-password"
-          margin="normal"
-        />
-
-        <TextField
-          required
           id="standard-password-input"
           label="Password"
-          className={classes.textField}
-          type="password"
-          autoComplete="current-password"
           margin="normal"
+          name="password"
+          onChange={this.handleChange}
+          type="password"
+          value={this.state.password}
+          required
         />
 
-        <TextField
-          required
+        {/* <TextField
+          className={classes.textField}
           id="standard-password-input"
           label="Password Confirmation"
-          className={classes.textField}
-          type="password"
-          autoComplete="current-password"
           margin="normal"
-        />
+          type="password"
+          required
+        /> */}
 
-      <Button variant="contained" color="primary" className={classes.button}>
+      <Button type="submit" variant="contained" color="primary" className={classes.button}>
         Primary
       </Button>
       </form>

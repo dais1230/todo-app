@@ -1,28 +1,48 @@
 package main
 
 import (
-	"fmt"
+	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/todo-app/server/src/handler"
 )
 
-// Association
 type User struct {
 	gorm.Model
-	Name  string `gorm:"size:255"`
-	Email string
-	Task  []Task
+	Name     string `sql:"not null"`
+	Password string `sql:"not null"`
+	Tasks    []Task `gorm:"foreignkey:UserRefer"`
 }
 
 type Task struct {
 	gorm.Model
-	UserID      int    `gorm:"index"`
-	Name        string `gorm:"size:255"`
-	Description string `gorm:"type:text"`
+	Description string `sql:"not null"`
+	Completed   bool   `sql:"not null"`
+	UserRefer   uint   `sql:"not null"`
+}
+
+var db *gorm.DB
+var allUsers []User
+
+func main() {
+	// instantiate echo
+	e := echo.New()
+
+	db := gormConnect()
+
+	e.Use(middleware.CORS())
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	defer db.Close()
+
+	// routing
+	e.POST("/signup", Signup)
+
+	// launch server
+	e.Start(":1313")
 }
 
 func gormConnect() *gorm.DB {
@@ -32,9 +52,11 @@ func gormConnect() *gorm.DB {
 	DBNAME := "todoapp"
 
 	CONNECT := USER + "@" + PROTOCOL + "/" + DBNAME + "?charset=utf8&parseTime=True&loc=Local"
-	db, err := gorm.Open(DBMS, CONNECT)
+	var err error
+	db, err = gorm.Open(DBMS, CONNECT)
 
-	db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&User{}, &Task{})
+	db.AutoMigrate(User{})
+	db.AutoMigrate(Task{})
 
 	if err != nil {
 		panic(err.Error())
@@ -42,27 +64,13 @@ func gormConnect() *gorm.DB {
 	return db
 }
 
-func main() {
-	// instantiate echo
-	e := echo.New()
-	db := gormConnect()
+func Signup(c echo.Context) error {
+	user := new(User)
 
-	e.Use(middleware.CORS())
-	e.Use(middleware.Logger())
-	e.Use(middleware.Recover())
+	if err := c.Bind(user); err != nil {
+		return err
+	}
 
-	var allUsers []User
-	db.Find(&allUsers)
-	fmt.Println(allUsers)
-
-	var allTasks []Task
-	db.Find(&allTasks)
-	fmt.Println(allTasks)
-
-	defer db.Close()
-
-	// routing
-	e.GET("/users", handler.Users())
-
-	e.Start(":1313")
+	db.Create(&user)
+	return c.NoContent(http.StatusOK)
 }
