@@ -39,7 +39,7 @@ func main() {
 	defer db.Close()
 
 	// routing
-	e.POST("/signup", Signup)
+	e.POST("/signup", Signup())
 
 	// launch server
 	e.Start(":1313")
@@ -64,13 +64,46 @@ func gormConnect() *gorm.DB {
 	return db
 }
 
-func Signup(c echo.Context) error {
-	user := new(User)
-
-	if err := c.Bind(user); err != nil {
-		return err
+func Users() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return c.JSON(http.StatusOK, allUsers)
 	}
+}
 
+func Signup() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		user := new(User)
+
+		if err := c.Bind(user); err != nil {
+			return err
+		}
+
+		if user.Name == "" || user.Password == "" {
+			return &echo.HTTPError{
+				Code:    http.StatusBadRequest,
+				Message: "invalid name or password",
+			}
+		}
+
+		if u := FindUser(&User{Name: user.Name}); u.ID != 0 {
+			return &echo.HTTPError{
+				Code:    http.StatusConflict,
+				Message: "name already exists",
+			}
+		}
+
+		CreateUser(user)
+		user.Password = ""
+		return c.JSON(http.StatusCreated, user)
+	}
+}
+
+func CreateUser(user *User) {
 	db.Create(&user)
-	return c.NoContent(http.StatusOK)
+}
+
+func FindUser(u *User) User {
+	var user User
+	k := db.Where(u).First(&user)
+	return user
 }
