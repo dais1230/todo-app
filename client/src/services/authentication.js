@@ -1,6 +1,6 @@
 import { BehaviorSubject } from 'rxjs';
-
 import { handleResponse } from '../helpers/handle-response';
+import { history } from '../helpers/history';
 
 const currentUserSubject = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
 
@@ -27,6 +27,7 @@ function login(state) {
         // store jwt token in local storage to keep user logged in between page refreshes
         localStorage.setItem('currentUser', JSON.stringify(user));
         currentUserSubject.next(user);
+        history.push('/list');
 
         return user;
     });

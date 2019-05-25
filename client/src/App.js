@@ -1,13 +1,12 @@
 import React from 'react';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
-import NavBar from './components/NavBar';
-import Signup from './signup';
-import Login from './login';
-import List from './list';
+import { Router, Route, Link } from 'react-router-dom';
 import { history } from './helpers/history';
 import { authenticationService } from './services/authentication';
-
-
+// components
+import NavBar from './components/NavBar';
+import List from './list';
+import Login from './login';
+import Signup from './signup';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -22,11 +21,6 @@ export default class App extends React.Component {
     authenticationService.currentUser.subscribe(x => this.setState({ currentUser: x }));
   }
 
-  logout() {
-    authenticationService.logout();
-    history.push('/login');
-  }
-
   render() {
     const Home = () => (
       <div>
@@ -36,7 +30,7 @@ export default class App extends React.Component {
     );
 
     return (
-      <BrowserRouter>
+      <Router history={history}>
         <div>
           <NavBar />
           <ul>
@@ -51,7 +45,7 @@ export default class App extends React.Component {
           <Route path='/login' component={Login} />
           <Route path='/list' component={List} />
         </div>
-      </BrowserRouter>
+      </Router>
     );
   }
 }

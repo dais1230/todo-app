@@ -6,6 +6,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { withStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { authenticationService } from '../services/authentication';
+import { history } from '../helpers/history';
 
 const styles = {
   root: {
@@ -17,21 +19,38 @@ const styles = {
   },
 };
 class NavBar extends Component {
+  handleSubmit() {
+    authenticationService.logout();
+    history.push('/login');
+  };
+
   render() {
     return (
       <div className={this.props.classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton className={this.props.classes.menuButton} color="inherit" aria-label="Menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" color="inherit" className={this.props.classes.root}>
-            To Do
-          </Typography>
-          <Button color="inherit">Logout</Button>
-        </Toolbar>
-      </AppBar>
-    </div>
+        <AppBar position="static">
+          <Toolbar>
+            <IconButton
+              className={this.props.classes.menuButton}
+              color="inherit"
+              aria-label="Menu">
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              className={this.props.classes.root}
+              color="inherit"
+              variant="h6">
+              To Do
+            </Typography>
+            <Button
+              color="inherit"
+              onClick={this.handleSubmit}
+              style={{ display: authenticationService.currentUserValue ? '' : 'none' }}
+              type="button">
+              Logout
+            </Button>
+          </Toolbar>
+        </AppBar>
+      </div>
     );
   }
 }

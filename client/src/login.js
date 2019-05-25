@@ -24,7 +24,10 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      name: '',
+      password: '',
+    };
 
     // redirect to home if already logged in
     if (authenticationService.currentUserValue) {
@@ -36,15 +39,13 @@ class Login extends React.Component {
   }
 
   handleChange (event) {
-    var data = this.state;
-
     switch (event.target.name) {
-        case 'name':
-            data.name = event.target.value;
-            break;
-        case 'password':
-            data.password = event.target.value;
-            break;
+      case 'name':
+        this.setState({name: event.target.value});
+        break;
+      case 'password':
+        this.setState({password: event.target.value});
+        break;
     }
   }
 
