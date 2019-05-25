@@ -15,7 +15,12 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// routing
-	e.POST("/signup", handler.Signup())
+	e.POST("/signup", handler.Signup)
+	e.POST("/login", handler.Login)
+
+	api := e.Group("/api")
+	api.Use(middleware.JWTWithConfig(handler.Config))
+	api.GET("/tasks", handler.GetTasks)
 
 	// launch server
 	e.Start(":1313")
