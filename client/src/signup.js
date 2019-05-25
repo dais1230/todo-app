@@ -19,8 +19,6 @@ const styles = theme => ({
   },
 });
 
-
-
 class Signup extends React.Component {
   constructor(props) {
     super(props);
@@ -45,7 +43,6 @@ class Signup extends React.Component {
   }
 
   handleSubmit() {
-    console.log(this.state)
     fetch('http://localhost:1313/signup', {
       headers: {
         'Accept': 'application/json',
@@ -53,22 +50,23 @@ class Signup extends React.Component {
       },
       mode: 'cors',
       method: 'POST',
+      redirect: 'follow',
       body:  JSON.stringify(this.state)
     })
-    .then(x => x.json())
-    .then(res => {
-      console.log(res);
+    .then(response => response.json())
+    .then(data => {
+      console.log(data, 'success')
     })
-    .catch((error) => {
-      console.log(error);
-    })
+    .catch(error => {
+      console.log(error, 'error');
+    });
   }
 
   render() {
     const { classes } = this.props;
 
     return (
-      <form className={classes.container} onSubmit={this.handleSubmit} autoComplete="off">
+      <form className={classes.container} autoComplete="off">
         <TextField
           className={classes.textField}
           id="standard-name"
@@ -101,9 +99,14 @@ class Signup extends React.Component {
           required
         /> */}
 
-      <Button type="submit" variant="contained" color="primary" className={classes.button}>
-        Primary
-      </Button>
+        <Button
+          className={classes.button}
+          color="primary"
+          onClick={this.handleSubmit}
+          type="button"
+          variant="contained">
+          Signup
+        </Button>
       </form>
     );
   }
