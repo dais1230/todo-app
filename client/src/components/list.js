@@ -12,6 +12,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
+import Pagination from 'material-ui-flat-pagination';
 
 const styles = theme => ({
   root: {
@@ -30,6 +31,8 @@ class TaskList extends React.Component {
     this.state = {
       tasks: [],
       isLoading: false,
+      offset: 0,
+      parPage: 10,
     };
   }
 
@@ -104,13 +107,19 @@ class TaskList extends React.Component {
 
   createLink() {
     history.push('/new');
-  }
+  };
+
+  handleClickPagination = offset => {
+    this.setState({ offset })
+  };
 
 
   render() {
     const { classes } = this.props;
     const tasks = this.state.tasks;
     const isLoading = this.state.isLoading;
+    const offset = this.state.offset;
+    const parPage = this.state.parPage;
 
     if (!isLoading) {
       return (
@@ -124,7 +133,7 @@ class TaskList extends React.Component {
             Create
           </Button>
           <List dense className={classes.root}>
-            {tasks.map((task, index) => (
+            {tasks.slice(offset, offset + parPage).map((task, index) => (
               <ListItem key={index} button>
                 <ListItemIcon>
                   <Checkbox
@@ -140,6 +149,12 @@ class TaskList extends React.Component {
               </ListItem>
             ))}
           </List>
+          <Pagination
+            limit={this.state.parPage}
+            offset={this.state.offset}
+            total={this.state.tasks.length}
+            onClick={(e, offset) => this.handleClickPagination(offset)}
+          />
         </div>
       );
     } else {
