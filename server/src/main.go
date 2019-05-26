@@ -23,6 +23,7 @@ func main() {
 	api.GET("/tasks", handler.GetTasks)
 	api.POST("/tasks", handler.AddTask)
 	api.PUT("/tasks/:id/completed", handler.UpdateTask)
+	api.DELETE("/tasks/:id", handler.DeleteTask)
 
 	// launch server
 	e.Start(":1313")

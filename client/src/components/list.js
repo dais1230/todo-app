@@ -5,8 +5,10 @@ import { history } from '../helpers/history';
 
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import DeleteIcon from '@material-ui/icons/Delete';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
@@ -80,6 +82,30 @@ class TaskList extends React.Component {
     history.push('/new');
   }
 
+  deleteItem = value => () => {
+    const requestOptions = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': authHeader()
+      },
+      mode: 'cors',
+      method: 'DELETE',
+      body: value,
+    };
+    fetch(`http://localhost:1313/api/tasks/${value.ID}`, requestOptions)
+    .then(res => {
+      this.fetchTasks()
+    })
+    .catch((error) => {
+      console.error(error);
+    })
+  };
+
+  createLink() {
+    history.push('/new');
+  }
+
 
   render() {
     const { classes } = this.props;
@@ -100,12 +126,16 @@ class TaskList extends React.Component {
           <List dense className={classes.root}>
             {tasks.map((task, index) => (
               <ListItem key={index} button>
-                <ListItemText primary={task.Description} />
-                <ListItemSecondaryAction>
+                <ListItemIcon>
                   <Checkbox
                     onChange={this.handleToggle(task)}
                     checked={task.Completed == true}
                   />
+                </ListItemIcon>
+                <ListItemText primary={task.Description} />
+                <ListItemSecondaryAction>
+                  <DeleteIcon
+                    onClick={this.deleteItem(task)}/>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}

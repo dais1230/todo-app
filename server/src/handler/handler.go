@@ -70,3 +70,23 @@ func UpdateTask(c echo.Context) error {
 	}
 	return c.NoContent(http.StatusNoContent)
 }
+
+func DeleteTask(c echo.Context) error {
+	uid := userIDFromToken(c)
+
+	if user := model.FindUser(&model.User{Model: gorm.Model{ID: uid}}); user.ID == 0 {
+		return echo.ErrNotFound
+	}
+
+	taskID, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		return echo.ErrNotFound
+	}
+	tid := uint(taskID)
+
+	if err := model.DeleteTask(&model.Task{Model: gorm.Model{ID: tid}, UserRefer: uid}); err != nil {
+		return echo.ErrNotFound
+	}
+
+	return c.NoContent(http.StatusNoContent)
+}

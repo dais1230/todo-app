@@ -72,3 +72,10 @@ func UpdateTask(t *Task) error {
 	}
 	return nil
 }
+
+func DeleteTask(t *Task) error {
+	if rows := db.Where(t).Delete(&Task{}).RowsAffected; rows == 0 {
+		return fmt.Errorf("Could not find Task (%v) to delete", t)
+	}
+	return nil
+}
