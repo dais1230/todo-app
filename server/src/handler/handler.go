@@ -8,6 +8,30 @@ import (
 	"github.com/todo-app/server/src/model"
 )
 
+func AddTask(c echo.Context) error {
+	task := new(model.Task)
+	if err := c.Bind(task); err != nil {
+		return err
+	}
+
+	if task.Description == "" {
+		return &echo.HTTPError{
+			Code:    http.StatusBadRequest,
+			Message: "invalid to or message fields",
+		}
+	}
+
+	uid := userIDFromToken(c)
+	if user := model.FindUser(&model.User{Model: gorm.Model{ID: uid}}); user.ID == 0 {
+		return echo.ErrNotFound
+	}
+
+	task.UserRefer = uid
+	model.CreateTask(task)
+
+	return c.JSON(http.StatusCreated, task)
+}
+
 func GetTasks(c echo.Context) error {
 	uid := userIDFromToken(c)
 

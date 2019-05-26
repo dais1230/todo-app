@@ -21,6 +21,7 @@ func main() {
 	api := e.Group("/api")
 	api.Use(middleware.JWTWithConfig(handler.Config))
 	api.GET("/tasks", handler.GetTasks)
+	api.POST("/tasks", handler.AddTask)
 
 	// launch server
 	e.Start(":1313")

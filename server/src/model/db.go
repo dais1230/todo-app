@@ -19,6 +19,8 @@ type Task struct {
 	UserRefer   uint   `sql:"not null"`
 }
 
+type Tasks []Task
+
 var db *gorm.DB
 
 func init() {
@@ -49,8 +51,8 @@ func FindUser(u *User) User {
 	return user
 }
 
-func FindTasks(t *Task) Task {
-	var tasks Task
+func FindTasks(t *Task) Tasks {
+	var tasks Tasks
 	db.Where(t).Find(&tasks)
 	return tasks
 }
