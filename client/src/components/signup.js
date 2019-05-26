@@ -3,7 +3,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { authenticationService } from './services/authentication';
+import { history } from '../helpers/history';
 
 const styles = theme => ({
   container: {
@@ -20,37 +20,47 @@ const styles = theme => ({
   },
 });
 
-class Login extends React.Component {
+class Signup extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      name: '',
-      password: '',
-    };
-
-    // redirect to home if already logged in
-    if (authenticationService.currentUserValue) {
-      this.props.history.push('/');
-    }
+    this.state = {};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange (event) {
+    var data = this.state;
+
     switch (event.target.name) {
-      case 'name':
-        this.setState({name: event.target.value});
-        break;
-      case 'password':
-        this.setState({password: event.target.value});
-        break;
+        case 'name':
+            data.name = event.target.value;
+            break;
+        case 'password':
+            data.password = event.target.value;
+            break;
     }
   }
 
   handleSubmit() {
-    authenticationService.login(this.state);
+    fetch('http://localhost:1313/signup', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      mode: 'cors',
+      method: 'POST',
+      redirect: 'follow',
+      body:  JSON.stringify(this.state)
+    })
+    .then(response => response.json())
+    .then(res => {
+      history.push('/login');
+    })
+    .catch(error => {
+      console.error(error);
+    });
   }
 
   render() {
@@ -81,21 +91,30 @@ class Login extends React.Component {
           required
         />
 
+        {/* <TextField
+          className={classes.textField}
+          id="standard-password-input"
+          label="Password Confirmation"
+          margin="normal"
+          type="password"
+          required
+        /> */}
+
         <Button
           className={classes.button}
           color="primary"
           onClick={this.handleSubmit}
           type="button"
           variant="contained">
-          Login
+          Signup
         </Button>
       </form>
     );
   }
 }
 
-Login.propTypes = {
+Signup.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(Signup);

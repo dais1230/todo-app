@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { authHeader } from '../helpers/auth-header';
+import { history } from '../helpers/history';
+
+import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
-import { authHeader } from './helpers/auth-header';
 
 const styles = theme => ({
   root: {
@@ -50,7 +53,6 @@ class TaskList extends React.Component {
     })
   }
 
-
   handleToggle = value => () => {
     const requestOptions = {
       headers: {
@@ -71,6 +73,10 @@ class TaskList extends React.Component {
     })
   };
 
+  createLink() {
+    history.push('/task/new');
+  }
+
 
   render() {
     const { classes } = this.props;
@@ -79,19 +85,28 @@ class TaskList extends React.Component {
 
     if (!isLoading) {
       return (
-        <List dense className={classes.root}>
-          {tasks.map((task, index) => (
-            <ListItem key={index} button>
-              <ListItemText primary={task.Description} />
-              <ListItemSecondaryAction>
-                <Checkbox
-                  onChange={this.handleToggle(task)}
-                  checked={task.Completed == true}
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
+        <div>
+          <Button
+            color="primary"
+            onClick={this.createLink}
+            type="button"
+            variant="contained">
+            Create
+          </Button>
+          <List dense className={classes.root}>
+            {tasks.map((task, index) => (
+              <ListItem key={index} button>
+                <ListItemText primary={task.Description} />
+                <ListItemSecondaryAction>
+                  <Checkbox
+                    onChange={this.handleToggle(task)}
+                    checked={task.Completed == true}
+                  />
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
+          </List>
+        </div>
       );
     } else {
       return <p>Loading...</p>;

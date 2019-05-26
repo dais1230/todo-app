@@ -4,9 +4,9 @@ import { history } from './helpers/history';
 import { authenticationService } from './services/authentication';
 // components
 import NavBar from './components/NavBar';
-import List from './list';
-import Login from './login';
-import Signup from './signup';
+import List from './components/list';
+import Login from './components/login';
+import Signup from './components/signup';
 
 export default class App extends React.Component {
   constructor(props) {
