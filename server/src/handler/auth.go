@@ -51,7 +51,6 @@ func Signup(c echo.Context) error {
 }
 
 func Login(c echo.Context) error {
-	fmt.Println(c)
 	u := new(model.User)
 	if err := c.Bind(u); err != nil {
 		return err

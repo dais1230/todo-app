@@ -34,7 +34,7 @@ function login(state) {
 }
 
 function logout() {
-  // remove user from local storage to log user out
+  // remove jwt token from local storage to log user out
   localStorage.removeItem('currentUser');
   currentUserSubject.next(null);
 }

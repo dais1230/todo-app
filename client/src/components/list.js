@@ -41,6 +41,7 @@ class TaskList extends React.Component {
     this.fetchTasks()
   }
 
+  // fetch all tasks
   fetchTasks() {
     const requestOptions = {
       headers: {
@@ -61,6 +62,7 @@ class TaskList extends React.Component {
     })
   }
 
+  // update a task for checking that task is done or not
   handleToggle = value => () => {
     const requestOptions = {
       headers: {
@@ -103,10 +105,6 @@ class TaskList extends React.Component {
     .catch((error) => {
       console.error(error);
     })
-  };
-
-  createLink() {
-    history.push('/new');
   };
 
   handleClickPagination = offset => {

@@ -21,7 +21,7 @@ func main() {
 	api := e.Group("/api")
 	api.Use(middleware.JWTWithConfig(handler.Config))
 	api.GET("/tasks", handler.GetTasks)
-	api.POST("/tasks", handler.AddTask)
+	api.POST("/tasks", handler.CreateTask)
 	api.PUT("/tasks/:id/completed", handler.UpdateTask)
 	api.DELETE("/tasks/:id", handler.DeleteTask)
 

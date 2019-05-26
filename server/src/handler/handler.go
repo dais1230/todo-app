@@ -9,7 +9,7 @@ import (
 	"github.com/todo-app/server/src/model"
 )
 
-func AddTask(c echo.Context) error {
+func CreateTask(c echo.Context) error {
 	task := new(model.Task)
 	if err := c.Bind(task); err != nil {
 		return err
