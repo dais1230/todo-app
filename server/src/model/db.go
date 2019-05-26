@@ -53,6 +53,10 @@ func FindUser(u *User) User {
 	return user
 }
 
+func CreateTask(task *Task) {
+	db.Create(task)
+}
+
 func FindTasks(t *Task) Tasks {
 	var tasks Tasks
 	db.Where(t).Find(&tasks)

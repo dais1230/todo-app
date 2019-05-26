@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Router, Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
@@ -67,48 +68,40 @@ class Signup extends React.Component {
     const { classes } = this.props;
 
     return (
-      <form className={classes.container} autoComplete="off">
-        <TextField
-          className={classes.textField}
-          id="standard-name"
-          label="Name"
-          margin="normal"
-          name="name"
-          onChange={this.handleChange}
-          value={this.state.name}
-          required
-        />
-
-        <TextField
-          className={classes.textField}
-          id="standard-password-input"
-          label="Password"
-          margin="normal"
-          name="password"
-          onChange={this.handleChange}
-          type="password"
-          value={this.state.password}
-          required
-        />
-
-        {/* <TextField
-          className={classes.textField}
-          id="standard-password-input"
-          label="Password Confirmation"
-          margin="normal"
-          type="password"
-          required
-        /> */}
-
-        <Button
-          className={classes.button}
-          color="primary"
-          onClick={this.handleSubmit}
-          type="button"
-          variant="contained">
-          Signup
-        </Button>
-      </form>
+      <Router history={history}>
+        <form className={classes.container} autoComplete="off">
+          <TextField
+            className={classes.textField}
+            id="standard-name"
+            label="Name"
+            margin="normal"
+            name="name"
+            onChange={this.handleChange}
+            value={this.state.name}
+            required
+          />
+          <TextField
+            className={classes.textField}
+            id="standard-password-input"
+            label="Password"
+            margin="normal"
+            name="password"
+            onChange={this.handleChange}
+            type="password"
+            value={this.state.password}
+            required
+          />
+          <Button
+            className={classes.button}
+            color="primary"
+            onClick={this.handleSubmit}
+            type="button"
+            variant="contained">
+            Signup
+          </Button>
+        </form>
+        <Link to='/login'>Login</Link>
+      </Router>
     );
   }
 }

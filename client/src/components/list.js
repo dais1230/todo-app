@@ -17,6 +17,9 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
+  button: {
+    marginTop: 20,
+  }
 });
 
 class TaskList extends React.Component {
@@ -74,7 +77,7 @@ class TaskList extends React.Component {
   };
 
   createLink() {
-    history.push('/task/new');
+    history.push('/new');
   }
 
 
@@ -87,6 +90,7 @@ class TaskList extends React.Component {
       return (
         <div>
           <Button
+            className={classes.button}
             color="primary"
             onClick={this.createLink}
             type="button"
