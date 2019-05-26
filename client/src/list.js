@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Checkbox from '@material-ui/core/Checkbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import { withStyles } from '@material-ui/core/styles';
 import { authHeader } from './helpers/auth-header';
@@ -25,7 +27,16 @@ class TaskList extends React.Component {
 
   componentDidMount() {
     this.setState({ isLoading: true })
-    const requestOptions = { headers: authHeader(), mode: 'cors' };
+    this.fetchTasks()
+  }
+
+  fetchTasks() {
+    const requestOptions = {
+      headers: {
+        'Authorization': authHeader()
+      },
+      mode: 'cors',
+    };
     fetch('http://localhost:1313/api/tasks', requestOptions)
     .then(x => x.json())
     .then(res => {
@@ -35,9 +46,31 @@ class TaskList extends React.Component {
       })
     })
     .catch((error) => {
-      console.log(error, 'error');
+      console.error(error);
     })
   }
+
+
+  handleToggle = value => () => {
+    const requestOptions = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': authHeader()
+      },
+      mode: 'cors',
+      method: 'PUT',
+      body: value,
+    };
+    fetch(`http://localhost:1313/api/tasks/${value.ID}/completed`, requestOptions)
+    .then(res => {
+      this.fetchTasks()
+    })
+    .catch((error) => {
+      console.error(error);
+    })
+  };
+
 
   render() {
     const { classes } = this.props;
@@ -50,6 +83,12 @@ class TaskList extends React.Component {
           {tasks.map((task, index) => (
             <ListItem key={index} button>
               <ListItemText primary={task.Description} />
+              <ListItemSecondaryAction>
+                <Checkbox
+                  onChange={this.handleToggle(task)}
+                  checked={task.Completed == true}
+                />
+              </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>

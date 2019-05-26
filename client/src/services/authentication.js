@@ -12,29 +12,29 @@ export const authenticationService = {
 };
 
 function login(state) {
-    fetch('http://localhost:1313/login', {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      mode: 'cors',
-      method: 'POST',
-      redirect: 'follow',
-      body:  JSON.stringify(state)
-    })
-    .then(handleResponse)
-    .then(user => {
-        // store jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        currentUserSubject.next(user);
-        history.push('/list');
+  fetch('http://localhost:1313/login', {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    mode: 'cors',
+    method: 'POST',
+    redirect: 'follow',
+    body:  JSON.stringify(state)
+  })
+  .then(handleResponse)
+  .then(user => {
+      // store jwt token in local storage to keep user logged in between page refreshes
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      currentUserSubject.next(user);
+      history.push('/list');
 
-        return user;
-    });
+      return user;
+  });
 }
 
 function logout() {
-    // remove user from local storage to log user out
-    localStorage.removeItem('currentUser');
-    currentUserSubject.next(null);
+  // remove user from local storage to log user out
+  localStorage.removeItem('currentUser');
+  currentUserSubject.next(null);
 }

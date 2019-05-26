@@ -22,6 +22,7 @@ func main() {
 	api.Use(middleware.JWTWithConfig(handler.Config))
 	api.GET("/tasks", handler.GetTasks)
 	api.POST("/tasks", handler.AddTask)
+	api.PUT("/tasks/:id/completed", handler.UpdateTask)
 
 	// launch server
 	e.Start(":1313")

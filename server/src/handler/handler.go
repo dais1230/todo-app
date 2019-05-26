@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
@@ -41,4 +42,31 @@ func GetTasks(c echo.Context) error {
 
 	tasks := model.FindTasks(&model.Task{UserRefer: uid})
 	return c.JSON(http.StatusOK, tasks)
+}
+
+func UpdateTask(c echo.Context) error {
+
+	uid := userIDFromToken(c)
+
+	if user := model.FindUser(&model.User{Model: gorm.Model{ID: uid}}); user.ID == 0 {
+		return echo.ErrNotFound
+	}
+
+	taskID, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		return echo.ErrNotFound
+	}
+	tid := uint(taskID)
+
+	tasks := model.FindTasks(&model.Task{Model: gorm.Model{ID: tid}, UserRefer: uid})
+	if len(tasks) == 0 {
+		return echo.ErrNotFound
+	}
+	task := tasks[0]
+	task.Completed = !tasks[0].Completed
+
+	if err := model.UpdateTask(&task); err != nil {
+		return echo.ErrNotFound
+	}
+	return c.NoContent(http.StatusNoContent)
 }

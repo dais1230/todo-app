@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 )
@@ -55,4 +57,14 @@ func FindTasks(t *Task) Tasks {
 	var tasks Tasks
 	db.Where(t).Find(&tasks)
 	return tasks
+}
+
+func UpdateTask(t *Task) error {
+	rows := db.Model(t).Update(map[string]interface{}{
+		"completed": t.Completed,
+	}).RowsAffected
+	if rows == 0 {
+		return fmt.Errorf("Could not find Task (%v) to update", t)
+	}
+	return nil
 }
