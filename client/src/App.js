@@ -1,5 +1,5 @@
-import React from 'react';
-import { Router, Route } from 'react-router-dom';
+ import React from 'react';
+import { Router, Route, Redirect, Switch } from 'react-router-dom';
 import { history } from './helpers/history';
 import { authenticationService } from './services/authentication';
 // components
@@ -26,13 +26,14 @@ export default class App extends React.Component {
   render() {
     return (
       <Router history={history}>
-        <div>
-          <NavBar />
-          <Route path='/signup' component={Signup} />
-          <Route path='/login' component={Login} />
-          <PrivateRoute path='/list' component={List} />
-          <PrivateRoute path='/new' component={TaskNew} />
-        </div>
+        <NavBar />
+        <Switch>
+          <Route exact path='/signup' component={Signup} />
+          <Route exact path='/login' component={Login} />
+          <PrivateRoute exact path='/list' component={List} />
+          <PrivateRoute exact path='/new' component={TaskNew} />
+          <Redirect from="/" to="/list" component={List}/>
+        </Switch>
       </Router>
     );
   }
