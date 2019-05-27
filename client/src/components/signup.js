@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { history } from '../helpers/history';
+import { authenticationService } from '../services/authentication';
 
 const styles = theme => ({
   container: {
@@ -26,6 +27,11 @@ class Signup extends React.Component {
     super(props);
 
     this.state = {};
+
+      // redirect to list if the user already logged in
+      if (authenticationService.currentUserValue) {
+        this.props.history.push('/list');
+      }
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);

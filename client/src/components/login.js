@@ -31,9 +31,9 @@ class Login extends React.Component {
       password: '',
     };
 
-    // redirect to home if the user already logged in
+    // redirect to list if the user already logged in
     if (authenticationService.currentUserValue) {
-      this.props.history.push('/');
+      this.props.history.push('/list');
     }
 
     this.handleChange = this.handleChange.bind(this);

@@ -7,6 +7,7 @@ import List from './components/list';
 import Login from './components/login';
 import NavBar from './components/NavBar';
 import TaskNew from './components/new';
+import PrivateRoute from './components/PrivateRoute';
 import Signup from './components/signup';
 
 export default class App extends React.Component {
@@ -29,8 +30,8 @@ export default class App extends React.Component {
           <NavBar />
           <Route path='/signup' component={Signup} />
           <Route path='/login' component={Login} />
-          <Route path='/list' component={List} />
-          <Route path='/new' component={TaskNew} />
+          <PrivateRoute path='/list' component={List} />
+          <PrivateRoute path='/new' component={TaskNew} />
         </div>
       </Router>
     );
