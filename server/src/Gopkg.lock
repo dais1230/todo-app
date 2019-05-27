@@ -153,6 +153,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/dgrijalva/jwt-go",
     "github.com/go-sql-driver/mysql",
     "github.com/jinzhu/gorm",
     "github.com/labstack/echo",
