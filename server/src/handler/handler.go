@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/daisuke13/todo-app/server/src/model"
 	"github.com/jinzhu/gorm"
 	"github.com/labstack/echo"
-	"github.com/todo-app/server/src/model"
 )
 
 func CreateTask(c echo.Context) error {

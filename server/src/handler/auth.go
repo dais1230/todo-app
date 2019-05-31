@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/daisuke13/todo-app/server/src/model"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/todo-app/server/src/model"
 )
 
 type jwtCustomClaims struct {

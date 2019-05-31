@@ -24,10 +24,12 @@
 #   go-tests = true
 #   unused-packages = true
 
-
 [prune]
   go-tests = true
   unused-packages = true
 
 [metadata.heroku]
   root-package = "github.com/daisuke13/todo-app/server/src"
+  go-version = "go1.11.2"
+  install = [ ".", "./cmd/..." ]
+  ensure = "true"

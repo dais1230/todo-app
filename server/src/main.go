@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/daisuke13/todo-app/server/src/handler"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/todo-app/server/src/handler"
 )
 
 func main() {
