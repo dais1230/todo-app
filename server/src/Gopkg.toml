@@ -28,3 +28,6 @@
 [prune]
   go-tests = true
   unused-packages = true
+
+[metadata.heroku]
+  root-package = "github.com/daisuke13/todo-app/server/src"
