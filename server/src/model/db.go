@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
@@ -26,17 +27,19 @@ type Tasks []Task
 var db *gorm.DB
 
 func init() {
-	DBMS := "mysql"
-	USER := "root"
-	PROTOCOL := "tcp(127.0.0.1:3306)"
-	DBNAME := "todoapp"
-
-	CONNECT := USER + "@" + PROTOCOL + "/" + DBNAME + "?charset=utf8&parseTime=True&loc=Local"
 	var err error
-	db, err = gorm.Open(DBMS, CONNECT)
+	var datasource string
+	if os.Getenv("DATABASE_URL") != "" {
+		// Heroku
+		datasource = "b83548ac2c0113:9c9db49c@tcp(us-cdbr-iron-east-02.cleardb.net:3306)/heroku_84f9a6ef922e736?parseTime=true"
+	} else {
+		// local
+		datasource = "root@tcp(127.0.0.1:3306)/todoapp?charset=utf8&parseTime=True&loc=Local"
+	}
 
+	db, err = gorm.Open("mysql", datasource)
 	if err != nil {
-		panic(err.Error())
+		panic("failed to connect database")
 	}
 
 	db.AutoMigrate(User{})
