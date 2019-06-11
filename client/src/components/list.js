@@ -52,8 +52,11 @@ class TaskList extends React.Component {
     fetch('http://localhost:1313/api/tasks', requestOptions)
     .then(x => x.json())
     .then(res => {
+      var sorted_tasks = res.sort((a, b) => {
+        return (a.CreatedAt < b.CreatedAt ? 1 : -1);
+      });
       this.setState({
-        tasks: res,
+        tasks: sorted_tasks,
         isLoading: false,
       })
     })

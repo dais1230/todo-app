@@ -10,8 +10,6 @@ import (
 )
 
 func main() {
-	defer db.Close()
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Fatal("$PORT must be set")
