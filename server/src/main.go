@@ -1,20 +1,12 @@
 package main
 
 import (
-	"log"
-	"os"
-
 	"github.com/daisuke13/todo-app/server/src/handler"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		log.Fatal("$PORT must be set")
-	}
-
 	// instantiate echo
 	e := echo.New()
 
